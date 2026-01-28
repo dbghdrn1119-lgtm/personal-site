@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>YU SIYUL | Portfolio</title>
+
+  <style>
+    @font-face {
+      font-family: 'Microsport Bold';
+      src: url('../font/Microsport Bold.ttf') format('truetype');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      overflow: hidden;
+      background: #000;
+    }
+
+    .wrap {
+      position: relative;
+      width: 100%;
+      max-width: 1920px;
+      height: 100vh;
+      margin: 0 auto;
+      overflow: hidden;
+    }
+
+    /* 배경 */
+    .bg-image {
+      position: absolute;
+      inset: 0;
+      background: url("images/20260108_개인사이트디자인_유시율(4차).jpg") center/cover no-repeat;
+      z-index: 0;
+    }
+
+    /* 흰 패널 */
+    .white-panel {
+      position: absolute;
+      width: 1827px;
+      height: 860px;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      background: #fff;
+      z-index: 1;
+      box-shadow: 0 18px 60px rgba(0, 0, 0, 0.65);
+    }
+
+    /* =========================
+       HEADER
+    ========================= */
+    .site-header {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 156px;
+      z-index: 60;
+    }
+
+    .header-row {
+      height: 156px;
+      padding: 0 65px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand {
+      font-family: "Microsport";
+      font-size: 25px;
+      letter-spacing: -1px;
+      -webkit-text-stroke: 1px #fff;
+      color: #000;
+      text-decoration: none;
+      display: inline-block;
+      transition: transform .2s ease, filter .2s ease;
+    }
+
+    .brand:hover {
+      transform: scale(1.02);
+      filter: brightness(1.2);
+    }
+
+    .tabs-bar {
+      flex: 1;
+      display: flex;
+      justify-content: flex-start;
+      padding-left: 60px;
+      align-items: center;
+      gap: 47px;
+      margin-top: 11px;
+      max-width: 1827px;
+    }
+
+    .tab {
+      position: relative;
+      display: inline-block;
+      font-family: "Microsport";
+      font-size: 20px;
+      letter-spacing: -0.3px;
+      color: #111;
+      text-decoration: none;
+      white-space: nowrap;
+      padding: 0 6px 8px;
+    }
+
+    .tab::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      bottom: 1px;
+      width: calc(100% - 6px);
+      height: 3px;
+      background: #111;
+      transform: translateX(-50%) scaleX(0);
+      transform-origin: center;
+      transition: transform .25s ease;
+    }
+
+    .tab:hover::after,
+    .tab.is-active::after {
+      transform: translateX(-50%) scaleX(1);
+    }
+
+    .hambug {
+      display: inline-block;
+    }
+
+    .hambug img {
+      width: 42px;
+      display: block;
+      transition: transform .2s ease, filter .2s ease;
+    }
+
+    .hambug:hover img {
+      transform: scale(1.1);
+      filter: brightness(1.2);
+    }
+
+    /* =========================
+       PANEL UI (슬라이더)
+    ========================= */
+    .panel-ui {
+      position: absolute;
+      width: 1827px;
+      height: 815px;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 2;
+      overflow: hidden;
+    }
+
+    .slider {
+      position: absolute;
+      left: 0;
+      top: 0px;
+      width: 100%;
+      height: calc(100% - 0px);
+      overflow: hidden;
+      padding: 0 90px;
+    }
+
+    .track {
+      height: 100%;
+      display: flex;
+      transition: transform .35s ease;
+      align-items: center;
+    }
+
+    .slide {
+      flex: 0 0 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .slide img {
+      width: auto;
+      height: auto;
+      max-width: 100%;
+      max-height: 100%;
+      display: block;
+    }
+
+    .arrow {
+      position: absolute;
+      top: calc(0px + ((100% - 0px) / 2));
+      transform: translateY(-50%);
+      width: 120px;
+      height: 120px;
+      border: 0;
+      background: transparent;
+      font-size: 120px;
+      color: rgba(0, 0, 0, 0.22);
+      cursor: pointer;
+      z-index: 5;
+      transition: transform .15s ease, color .15s ease;
+    }
+
+    .arrow.left {
+      left: 30px;
+    }
+
+    .arrow.right {
+      right: 30px;
+    }
+
+    .arrow:hover {
+      color: rgba(0, 0, 0, 0.4);
+      transform: translateY(-50%) scale(1.05);
+    }
+
+    /* ===== 햄버거 메뉴 오버레이 ===== */
+    .menu-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.72);
+      backdrop-filter: blur(2px);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity .25s ease, visibility .25s ease;
+      z-index: 9999;
+    }
+
+    .menu-overlay.open {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .menu-panel {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: min(420px, 86vw);
+      height: 100%;
+      background: rgba(245, 245, 245, 0.55);
+      backdrop-filter: blur(10px);
+      transform: translateX(100%);
+      transition: transform .25s ease;
+      padding: 26px 24px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .menu-overlay.open .menu-panel {
+      transform: translateX(0);
+    }
+
+    .menu-close {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      width: 44px;
+      height: 44px;
+      border: 0;
+      background: transparent;
+      font-size: 34px;
+      line-height: 44px;
+      cursor: pointer;
+    }
+
+    .menu-list {
+      list-style: none;
+      margin-top: 90px;
+      display: grid;
+      gap: 30px;
+    }
+
+    .menu-footer {
+      margin-top: auto;
+      padding-top: 28px;
+      padding-bottom: 18px;
+      border-top: 1px solid rgba(0, 0, 0, 0.12);
+      transform: translateY(-80px);
+    }
+
+    .menu-footer .contact-title {
+      font-family: "Microsport";
+      font-size: 14px;
+      letter-spacing: 1.2px;
+      opacity: 0.65;
+      margin-bottom: 18px;
+    }
+
+    .menu-footer .contact-line {
+      display: flex;
+      gap: 14px;
+      align-items: baseline;
+      margin-bottom: 14px;
+    }
+
+    .menu-footer .label {
+      width: 92px;
+      font-size: 12px;
+      letter-spacing: 1px;
+      opacity: 0.55;
+    }
+
+    .menu-footer .value {
+      font-size: 16px;
+      color: #111;
+      text-decoration: none;
+      opacity: 0.9;
+      position: relative;
+      padding-bottom: 3px;
+    }
+
+    .menu-footer .value::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      height: 2px;
+      background: #111;
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform .25s ease;
+    }
+
+    .menu-footer .value:hover::after {
+      transform: scaleX(1);
+    }
+
+    .menu-footer .copyright {
+      margin-top: 18px;
+      font-size: 12px;
+      opacity: 0.55;
+      line-height: 1.5;
+    }
+
+    .menu-link {
+      display: inline-block;
+      font-family: "Microsport";
+      letter-spacing: -0.5px;
+      font-size: 28px;
+      color: #111;
+      text-decoration: none;
+      position: relative;
+    }
+
+    .menu-link::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: 0px;
+      width: 100%;
+      height: 3px;
+      background: #111;
+      transform: scaleX(0);
+      transform-origin: center;
+      transition: transform .25s ease;
+    }
+
+    .menu-link:hover::after {
+      transform: scaleX(1);
+    }
+
+    body.lock {
+      overflow: hidden;
+    }
+
+    /* ===== CTA 버튼 ===== */
+    .slide-inner {
+      position: relative;
+      display: inline-block;
+    }
+
+    .cta {
+      position: absolute;
+      right: 138px;
+      bottom: 0px;
+      display: flex;
+      gap: 28px;
+      z-index: 20;
+    }
+
+    .cta1 {
+      position: absolute;
+      right: 338px;
+      bottom: 0px;
+      display: flex;
+      z-index: 20;
+    }
+
+    .cta a,
+    .cta1 a {
+      display: block;
+    }
+
+    /* ✅ 버튼 이미지가 사라지는 문제 방지: 고정폭 */
+    .cta img,
+    .cta1 img {
+      width: 170px;   /* 필요 시 크기만 조절 */
+      height: auto;
+      display: block;
+    }
+
+    .cta a .hover,
+    .cta1 a .hover {
+      display: none;
+    }
+
+    .cta a:hover .default,
+    .cta1 a:hover .default {
+      display: none;
+    }
+
+    .cta a:hover .hover,
+    .cta1 a:hover .hover {
+      display: block;
+    }
+
+    /* =========================
+       랜딩/외부페이지 오버레이 모달
+    ========================= */
+    .lp-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, .72);
+      backdrop-filter: blur(2px);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity .25s ease, visibility .25s ease;
+      z-index: 10000;
+    }
+
+    .lp-overlay.open {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .lp-modal {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: min(1200px, 92vw);
+      height: min(780px, 86vh);
+      background: #fff;
+      box-shadow: 0 18px 60px rgba(0, 0, 0, .55);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .lp-close {
+      position: absolute;
+      top: 10px;
+      right: 12px;
+      width: 44px;
+      height: 44px;
+      border: 0;
+      background: rgba(255, 255, 255, .85);
+      font-size: 34px;
+      line-height: 44px;
+      cursor: pointer;
+      z-index: 2;
+      border-radius: 10px;
+    }
+
+    .lp-frame {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      display: block;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="bg-image"></div>
+    <div class="white-panel"></div>
+
+    <header class="site-header">
+      <div class="header-row">
+        <a class="brand" href="index.html">YU SIYUL</a>
+
+        <nav class="tabs-bar" aria-label="Portfolio tabs">
+          <a href="#" class="tab is-active" data-go="0">WEBSITE DESIGN</a>
+          <a href="#" class="tab" data-go="1">POSTCARD DESIGN</a>
+          <a href="#" class="tab" data-go="2">POSTER DESIGN</a>
+          <a href="#" class="tab" data-go="3">EVENT DESIGN</a>
+          <a href="#" class="tab" data-go="4">MOBILE DESIGN</a>
+          <a href="#" class="tab" data-go="5">BRAND DESIGN</a>
+        </nav>
+
+        <a class="hambug" href="#" id="menuOpen" aria-label="menu open">
+          <img src="images/hamburger.png" alt="hamburger">
+        </a>
+      </div>
+    </header>
+
+    <div class="panel-ui">
+      <div class="slider">
+        <div class="track" id="track">
+
+          <!-- 0) WEBSITE DESIGN -->
+          <section class="slide">
+            <div class="slide-inner">
+              <img src="images/Group 20.png" alt="Website Design">
+
+              <div class="cta">
+                <!-- MORE VIEW (모달) -->
+                <a href="#" class="openModal" data-url="website_more.html" rel="noopener">
+                  <img class="default" src="images/more view.png" alt="more view">
+                  <img class="hover" src="images/more view_hover.png" alt="more view hover">
+                </a>
+
+                <!-- WEB SITE (모달) -->
+                <a href="https://dbghdrn1119-lgtm.github.io/website/index.html" target="_blank" rel="noopener">
+                  <img class="default" src="images/web site.png" alt="web site">
+                  <img class="hover" src="images/web site_hover.png" alt="web site hover">
+                </a>
+              </div>
+            </div>
+          </section>
+
+          <!-- 1) POSTCARD DESIGN -->
+          <section class="slide">
+            <div class="slide-inner">
+              <img src="images/Group 21.png" alt="Postcard Design">
+
+              <div class="cta1">
+                <a href="#" class="openModal" data-url="postcard_more.html" rel="noopener">
+                  <img class="default" src="images/more view.png" alt="more view">
+                  <img class="hover" src="images/more view_hover.png" alt="more view hover">
+                </a>
+              </div>
+            </div>
+          </section>
+
+          <!-- 2) POSTER DESIGN -->
+          <section class="slide">
+            <div class="slide-inner">
+              <img src="images/Group 22.png" alt="Poster Design">
+
+              <div class="cta1">
+                <a href="#" class="openModal" data-url="poster_more.html" rel="noopener">
+                  <img class="default" src="images/more view.png" alt="more view">
+                  <img class="hover" src="images/more view_hover.png" alt="more view hover">
+                </a>
+              </div>
+            </div>
+          </section>
+
+          <!-- 3) EVENT DESIGN -->
+          <section class="slide">
+            <div class="slide-inner">
+              <img src="images/Group 23.png" alt="Event Design">
+
+              <div class="cta">
+                <!-- MORE VIEW (모달) -->
+                <a href="#" class="openModal" data-url="event_more.html" rel="noopener">
+                  <img class="default" src="images/more view.png" alt="more view">
+                  <img class="hover" src="images/more view_hover.png" alt="more view hover">
+                </a>
+
+                <!-- EVENTPAGE (모달) -->
+                <a href="#" class="openModal" data-url="eventpage.html" rel="noopener">
+                  <img class="default" src="images/eventpage.png" alt="eventpage">
+                  <img class="hover" src="images/eventpage_hover.png" alt="eventpage hover">
+                </a>
+              </div>
+            </div>
+          </section>
+
+          <!-- 4) MOBILE DESIGN -->
+          <section class="slide">
+            <div class="slide-inner">
+              <img src="images/Group 24.png" alt="Mobile Design">
+
+              <div class="cta">
+                <!-- MORE VIEW (모달) -->
+                <a href="#" class="openModal" data-url="mobile_more.html" rel="noopener">
+                  <img class="default" src="images/more view.png" alt="more view">
+                  <img class="hover" src="images/more view_hover.png" alt="more view hover">
+                </a>
+
+                <!-- PROTOTYPE (모달) -->
+                <a href="https://www.figma.com/proto/MCA0OAk1QIjXo9d8OLiPhF/%EB%AA%A8%EB%B0%94%EC%9D%BC%EB%94%94%EC%9E%90%EC%9D%B8_%EC%9C%A0%EC%8B%9C%EC%9C%A8?page-id=0%3A1&node-id=9-310&viewport=-2407%2C-237%2C0.75&t=2MvNk5ojHDYVbqgv-1&scaling=scale-down&content-scaling=fixed&starting-point-node-id=9%3A310" target="_blank" rel="noopener">
+                  <img class="default" src="images/prototype.png" alt="prototype">
+                  <img class="hover" src="images/prototype_hover.png" alt="prototype hover">
+                </a>
+              </div>
+            </div>
+          </section>
+
+          <!-- 5) BRAND DESIGN -->
+          <section class="slide">
+            <div class="slide-inner">
+              <img src="images/Group 25.png" alt="Brand Design">
+
+              <div class="cta1">
+                <a href="#" class="openModal" data-url="brand_more.html" rel="noopener">
+                  <img class="default" src="images/more view.png" alt="more view">
+                  <img class="hover" src="images/more view_hover.png" alt="more view hover">
+                </a>
+              </div>
+            </div>
+          </section>
+
+        </div>
+
+        <button class="arrow left" id="prev" type="button" aria-label="prev">‹</button>
+        <button class="arrow right" id="next" type="button" aria-label="next">›</button>
+      </div>
+    </div>
+
+    <!-- 햄버거 메뉴 오버레이 -->
+    <div class="menu-overlay" id="menuOverlay" aria-hidden="true">
+      <nav class="menu-panel" role="dialog" aria-modal="true" aria-label="메뉴">
+        <button class="menu-close" id="menuClose" type="button" aria-label="메뉴 닫기">×</button>
+
+        <ul class="menu-list">
+          <li><a href="index.html" class="menu-link">HOME</a></li>
+          <li><a href="pofol.html" class="menu-link">PORTFOLIO</a></li>
+          <li><a href="coverletter.html" class="menu-link">COVER LETTER</a></li>
+        </ul>
+
+        <div class="menu-footer">
+          <div class="contact-title">CONTACT</div>
+
+          <div class="contact-line">
+            <span class="label">PHONE</span>
+            <a class="value" href="tel:010-8693-7670">010-8693-7670</a>
+          </div>
+
+          <div class="contact-line">
+            <span class="label">EMAIL</span>
+            <a class="value" href="mailto:dbtldbf1119@naver.com">dbtldbf1119@naver.com</a>
+          </div>
+
+          <div class="contact-line">
+            <span class="label">INSTAGRAM</span>
+            <a class="value" href="#" target="_blank" rel="noopener">@dbtldbf</a>
+          </div>
+
+          <p class="copyright">© 2026 YU SIYUL. All rights reserved.</p>
+        </div>
+      </nav>
+    </div>
+
+    <!-- ✅ 랜딩/외부페이지 모달 오버레이 -->
+    <div class="lp-overlay" id="lpOverlay" aria-hidden="true">
+      <div class="lp-modal" role="dialog" aria-modal="true" aria-label="페이지 미리보기">
+        <button class="lp-close" id="lpClose" type="button" aria-label="닫기">×</button>
+        <iframe class="lp-frame" id="lpFrame" src=""></iframe>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // ===== 슬라이더(무한루프) =====
+    const track = document.getElementById('track');
+    const prev = document.getElementById('prev');
+    const next = document.getElementById('next');
+    const tabs = Array.from(document.querySelectorAll('.tab'));
+
+    const originals = Array.from(track.children);
+    const realCount = originals.length;
+
+    const firstClone = originals[0].cloneNode(true);
+    const lastClone = originals[realCount - 1].cloneNode(true);
+
+    track.appendChild(firstClone);
+    track.insertBefore(lastClone, originals[0]);
+
+    const slides = Array.from(track.children);
+
+    let index = 1;
+    let lock = false;
+
+    track.style.transition = 'none';
+    track.style.transform = `translateX(-${index * 100}%)`;
+
+    function setActiveTab(realIdx) {
+      tabs.forEach(t => t.classList.remove('is-active'));
+      const active = tabs.find(t => Number(t.dataset.go) === realIdx);
+      if (active) active.classList.add('is-active');
+    }
+
+    function moveTo(newIndex) {
+      if (lock) return;
+      lock = true;
+
+      track.style.transition = 'transform .35s ease';
+      index = newIndex;
+      track.style.transform = `translateX(-${index * 100}%)`;
+    }
+
+    track.addEventListener('transitionend', () => {
+      if (index === 0) {
+        track.style.transition = 'none';
+        index = realCount;
+        track.style.transform = `translateX(-${index * 100}%)`;
+      }
+
+      if (index === realCount + 1) {
+        track.style.transition = 'none';
+        index = 1;
+        track.style.transform = `translateX(-${index * 100}%)`;
+      }
+
+      const realIdx = (index - 1 + realCount) % realCount;
+      setActiveTab(realIdx);
+
+      lock = false;
+    });
+
+    prev.addEventListener('click', () => moveTo(index - 1));
+    next.addEventListener('click', () => moveTo(index + 1));
+
+    tabs.forEach(t => {
+      t.addEventListener('click', (e) => {
+        e.preventDefault();
+        const realIdx = Number(t.dataset.go);
+        moveTo(realIdx + 1);
+      });
+    });
+
+    setActiveTab(0);
+
+    // ===== 햄버거 오버레이 =====
+    const menuOpen = document.getElementById('menuOpen');
+    const menuOverlay = document.getElementById('menuOverlay');
+    const menuClose = document.getElementById('menuClose');
+
+    function openMenu() {
+      menuOverlay.classList.add('open');
+      document.body.classList.add('lock');
+      menuOverlay.setAttribute('aria-hidden', 'false');
+    }
+    function closeMenu() {
+      menuOverlay.classList.remove('open');
+      document.body.classList.remove('lock');
+      menuOverlay.setAttribute('aria-hidden', 'true');
+    }
+
+    menuOpen.addEventListener('click', (e) => { e.preventDefault(); openMenu(); });
+    menuClose.addEventListener('click', closeMenu);
+    menuOverlay.addEventListener('click', (e) => {
+      if (e.target === menuOverlay) closeMenu();
+    });
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeMenu();
+    });
+
+    // ===== 마우스 휠로 슬라이드 이동 =====
+    let wheelLock = false;
+
+    function onWheelSlide(e) {
+      if (lock || wheelLock) return;
+
+      wheelLock = true;
+
+      if (e.deltaY > 0) moveTo(index + 1);
+      else if (e.deltaY < 0) moveTo(index - 1);
+
+      setTimeout(() => {
+        wheelLock = false;
+      }, 500);
+    }
+
+    const sliderEl = document.querySelector('.slider');
+    sliderEl.addEventListener('wheel', onWheelSlide, { passive: true });
+
+    /* =========================
+       CTA 버튼 클릭 -> 모달로 띄우기
+    ========================= */
+    const lpOverlay = document.getElementById('lpOverlay');
+    const lpFrame = document.getElementById('lpFrame');
+    const lpClose = document.getElementById('lpClose');
+
+    function openLP(url) {
+      if (!url) return;
+      lpFrame.src = url;
+      lpOverlay.classList.add('open');
+      document.body.classList.add('lock');
+      lpOverlay.setAttribute('aria-hidden', 'false');
+    }
+
+    function closeLP() {
+      lpOverlay.classList.remove('open');
+      lpOverlay.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('lock');
+      lpFrame.src = "";
+    }
+
+    document.addEventListener('click', (e) => {
+      const a = e.target.closest('a.openModal');
+      if (!a) return;
+
+      e.preventDefault();
+      openLP(a.dataset.url);
+    });
+
+    lpClose.addEventListener('click', closeLP);
+    lpOverlay.addEventListener('click', (e) => {
+      if (e.target === lpOverlay) closeLP();
+    });
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && lpOverlay.classList.contains('open')) closeLP();
+    });
+  </script>
+</body>
+
+</html>
